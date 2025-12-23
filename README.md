@@ -1,77 +1,29 @@
-WCEBleedGen: Dual-Task Deep Learning System for Bleeding Detection and Segmentation
+DMP-WCEBleedNet: Automated Bleeding Detection in WCEDual-Branch Deep Learning Architecture for Segmentation and Classification of Wireless Capsule Endoscopy Images.
 
-Wireless Capsule Endoscopy (WCE) generates thousands of gastrointestinal images per patient, making manual bleeding detection time-consuming and error-prone. This project presents a dual-task deep learning framework that simultaneously performs bleeding classification and pixel-level bleeding segmentation from WCE images.
+📌 Overview
+This project focuses on the automated detection and localization of gastrointestinal bleeding using Wireless Capsule Endoscopy (WCE) images. Identifying bleeding manually is a time-consuming task for clinicians due to the thousands of frames generated per scan.DMP-WCEBleedNet leverages a dual-task learning approach to simultaneously perform:Binary Classification: Distinguishing between "Bleeding" and "Non-Bleeding" frames.
+Semantic Segmentation: Generating precise pixel-level masks to pinpoint the bleeding regions.
 
-The system is designed to assist clinicians by providing both a binary bleeding decision and an interpretable segmentation mask highlighting bleeding regions.
+🏗️ Architecture
+The core of this repository is the Dual-Mode/Multi-Path (DMP) architecture. It utilizes a ResNet-based UNet backbone to extract high-level features while maintaining spatial resolution for accurate mask generation.
+Key Components:Encoder: Pre-trained ResNet backbone for robust feature extraction.
+Decoder: Symmetrical expanding path with skip connections to recover spatial details.
+Dual Head:Segmentation Head: Sigmoid activation producing a 2D probability map.
+Classification Head: Global Average Pooling followed by fully connected layers to predict the class.
 
-Key Features
+📊 Dataset
+The model is trained and evaluated on the WCEBleedGen dataset.
+Input: 3-channel RGB images from capsule endoscopy.
+Ground Truth: Corresponding binary masks where white pixels ($255$) represent bleeding zones.
 
-• Dual-task architecture combining classification and segmentation
-• ResNet-based encoder with UNet-style decoder
-• End-to-end training with joint loss optimization
-• Robust data augmentation for medical image variability
-• Detailed evaluation using Dice, ROC-AUC, precision, recall, F1, and confusion matrices
+🚀 Key Features
+Hybrid Loss Function: Combines Binary Cross-Entropy (BCE) with Dice Loss to handle class imbalance in medical masks.
+Advanced Augmentation: Utilizes the albumentations library (Horizontal/Vertical flips, Random Rotations, and Color Jitter) to improve model generalization.
+Performance Metrics:Segmentation: Dice Coefficient, Mean Intersection over Union (mIoU).Classification: Accuracy, Precision, Recall, and ROC-AUC.
 
-Model Architecture
-
-The proposed DMP_WCEBleedNet consists of:
-
-A shared encoder for feature extraction
-
-A classification head producing bleeding logits
-
-A segmentation decoder generating pixel-wise masks
-
-Loss Function:
-
-BCEWithLogitsLoss for classification
-
-Dice Loss / BCE for segmentation
-
-Combined multi-task loss for joint optimization
-
-Architecture and training flow are illustrated in the docs/ folder.
-
-Workflow Overview
-
-Load raw WCE images and corresponding masks
-
-Apply preprocessing and data augmentation
-
-Split dataset into train, validation, and test sets
-
-Train the dual-task model using Adam optimizer
-
-Validate using thresholded segmentation outputs
-
-Evaluate performance using classification and segmentation metrics
-
-Visualize results and export metrics
-
-Results & Evaluation
-
-The system evaluates:
-
+📈 Results
+The model achieves high sensitivity in detecting even small hemorrhagic areas.
 Accuracy, Precision, Recall, F1-Score
-
 Dice Coefficient for segmentation
-
 ROC-AUC curves
-
 Confusion matrices for both tasks
-
-All metrics, plots, and logs are saved for reproducibility.
-
-Tech Stack
-
-Python
-
-PyTorch
-
-Torchvision
-
-NumPy, Pandas
-
-OpenCV
-
-Matplotlib, Seaborn
